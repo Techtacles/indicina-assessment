@@ -1,9 +1,3 @@
-module "tfstate_bucket" {
-  source      = "./modules/s3"
-  bucket_name = "indicina-de-project-tfstate-bucket"
-
-}
-
 module "s3_bucket_zipped_lambda" {
   source      = "./modules/s3"
   bucket_name = var.s3_zipped_lambda_bucket_name

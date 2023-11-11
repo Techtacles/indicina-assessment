@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = module.tfstate_bucket.bucket_name
+    bucket = "indicina-de-project-tfstate-bucket"
     key    = "terraform.tfstate"
   }
 }

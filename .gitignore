@@ -1,0 +1,8 @@
+*.terraform
+*.tfstate
+*.lock.hcl
+.DS_Store
+*.tfvars
+local_images
+__pycache__
+py_local.py

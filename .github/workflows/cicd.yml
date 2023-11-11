@@ -35,6 +35,7 @@ jobs:
       shell: bash
       env:
         TERRAFORM_VARIABLES: ${{ secrets.TERRAFORM_VARIABLES }}
+      working-directory: ./infrastructure/terraform
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1

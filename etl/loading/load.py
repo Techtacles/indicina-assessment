@@ -20,22 +20,22 @@ class Loading:
                        ) -> None:
 
         self.logger.info("converting dataframes to csv")
-        customer_df.to_csv("customer_df.csv")
-        loan_df.to_csv("loan_df.csv")
-        fact_table.to_csv("fact_table.csv")
+        customer_df.to_csv("/tmp/customer_df.csv")
+        loan_df.to_csv("/tmp/loan_df.csv")
+        fact_table.to_csv("/tmp/fact_table.csv")
         self.logger.info("Successfully converted data to csv")
 
     def write_to_s3(self, bucket_name: str) -> None:
         try:
             s3_client = boto3.client("s3")
             self.logger.info("Uploading data to s3")
-            s3_client.upload_file("customer_df.csv", bucket_name,
+            s3_client.upload_file("/tmp/customer_df.csv", bucket_name,
                                   "customer_data/customer_df.csv")
 
-            s3_client.upload_file("loan_df.csv", bucket_name,
+            s3_client.upload_file("/tmp/loan_df.csv", bucket_name,
                                   "loan_data/loan_df.csv")
 
-            s3_client.upload_file("fact_table.csv", bucket_name,
+            s3_client.upload_file("/tmp/fact_table.csv", bucket_name,
                                   "fact_table/fact_table.csv")
 
             self.logger.info("Successfully written data to s3")

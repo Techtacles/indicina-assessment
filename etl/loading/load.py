@@ -20,9 +20,9 @@ class Loading:
                        ) -> None:
 
         self.logger.info("converting dataframes to csv")
-        customer_df.to_csv("/tmp/customer_df.csv")
-        loan_df.to_csv("/tmp/loan_df.csv")
-        fact_table.to_csv("/tmp/fact_table.csv")
+        customer_df.to_csv("/tmp/customer_df.csv", index=False)
+        loan_df.to_csv("/tmp/loan_df.csv", index=False)
+        fact_table.to_csv("/tmp/fact_table.csv", index=False)
         self.logger.info("Successfully converted data to csv")
 
     def write_to_s3(self, bucket_name: str) -> None:

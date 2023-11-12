@@ -94,6 +94,8 @@ class Loading:
             DELIMITER ',' ;
         """
         join_tables = """
+            CREATE TABLE indicina_schema.merged_table
+            AS(
             SELECT c.customer_id,
             c.transaction_date,
             c.transaction_amount,
@@ -108,7 +110,7 @@ class Loading:
             JOIN
             indicina_schema.loan_dim l
             ON
-            c.customer_id=l.customer_id;
+            c.customer_id=l.customer_id);
 
         """
         try:

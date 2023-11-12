@@ -19,5 +19,7 @@ resource "aws_lambda_function" "lambda_fn" {
       REDSHIFT_IAM_ROLE = var.redshift_iam_role_arn
     }
   }
+  depends_on = [ aws_iam_role_policy_attachment.lambda_logs,
+    aws_cloudwatch_log_group.lambda_cw, ]
 
 }

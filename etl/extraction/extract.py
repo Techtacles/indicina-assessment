@@ -15,14 +15,12 @@ class Extraction:
 
     def read_csv(self, customer_path: str, loan_path: str) -> Iterable:
         load_data_path = f"\
-                {os.path.dirname(current_path)}\
-                /{self.data_folder}\
+                {self.data_folder}\
                 /{loan_path}\
                 /loan_data.csv"
 
         customer_data_path = f" \
-                {os.path.dirname(current_path)}\
-                /{self.data_folder}\
+                {self.data_folder}\
                 /{customer_path}\
                 /customer_data.csv"
 

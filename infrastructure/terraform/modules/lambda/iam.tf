@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "glue_permission" {
 
     ]
 
-    resources = ["arn:aws:glue:*:*:*","arn:aws:redshift:*:*:*","arn:aws:s3:*:*"]
+    resources = ["arn:aws:glue:*:*:*","arn:aws:redshift:*:*:*","arn:aws:s3:*"]
   }
 }
 

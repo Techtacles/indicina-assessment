@@ -28,6 +28,7 @@ resource "null_resource" "zip_file" {
         echo "Pushing to ecr"
         cd ../../
         pwd
+        ls
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${var.aws_account_number}.dkr.ecr.us-east-1.amazonaws.com
         docker build -t ${var.ecr_repo} .
         docker tag ${var.ecr_repo}:latest ${module.ecr.ecr_repo_url}:latest

@@ -1,3 +1,7 @@
+variable "aws_account_number" {
+  type = number
+
+}
 variable "s3_zipped_lambda_bucket_name" {
   type = string
 
@@ -32,5 +36,10 @@ variable "master_username" {
 }
 variable "master_password" {
   type = string
+
+}
+variable "ecr_repo" {
+  type    = string
+  default = "indicina-ecr-repo"
 
 }

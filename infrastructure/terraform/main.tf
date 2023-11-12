@@ -19,11 +19,18 @@ resource "null_resource" "zip_file" {
     command = <<EOF
         cd ../../
         cp -r data etl
+        cp Dockerfile etl
         cd etl
         zip -r zipped_file.zip .
         aws s3 cp zipped_file.zip s3://${module.s3_bucket_zipped_lambda.bucket_name}/zipped_lambda/zipped_file.zip
         echo "Successfully uploaded zip file to s3"
 
+        echo "Pushing to ecr"
+        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${var.aws_account_number}.dkr.ecr.us-east-1.amazonaws.com
+        docker build -t ${var.ecr_repo} .
+        docker tag ${var.ecr_repo}:latest ${module.ecr.ecr_repo_url}:latest
+        docker push ${module.ecr.ecr_repo_url}:latest
+        echo "Successfully pushed to ecr"
     EOF
 
   }
@@ -49,7 +56,7 @@ resource "aws_glue_connection" "redshift_glue_con" {
 }
 
 module "lambda" {
-  depends_on            = [null_resource.zip_file, module.redshift]
+  depends_on            = [null_resource.zip_file, module.redshift, module.ecr]
   source                = "./modules/lambda"
   s3_bucket             = module.s3_bucket_zipped_lambda.bucket_name
   s3_key                = "zipped_lambda/zipped_file.zip"
@@ -59,6 +66,8 @@ module "lambda" {
   glue_conn_name        = aws_glue_connection.redshift_glue_con.name
   redshift_db_name      = module.redshift.db_name
   redshift_iam_role_arn = module.redshift.redshift_iam_arn
+  ecr_image_uri         = module.ecr.ecr_repo_url
+  ecr_sha               = module.ecr.ecr_sha
 
 }
 
@@ -71,5 +80,11 @@ module "redshift" {
   master_password     = var.master_password
   logging_bucket_name = module.s3_redshift_logging.bucket_name
 
+
+}
+
+module "ecr" {
+  source   = "./modules/ecr"
+  ecr_name = var.ecr_repo
 
 }

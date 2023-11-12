@@ -47,7 +47,7 @@ class Loading:
     def load_redshift(self, connection: str, bucket: str,
                       redshift_iam: str, db: str) -> None:
         conn = wr.redshift.connect(connection=connection,
-                                   ssl=False)
+                                   dbname=db, ssl=False)
         create_schema = """CREATE SCHEMA IF NOT EXISTS indicina_schema"""
         create_fact_table = """
         CREATE TABLE IF NOT EXISTS indicina_schema.fact_table(
@@ -74,18 +74,20 @@ class Loading:
             balance DECIMAL
         );
         """
-        load_from_s3 = f"""
-        COPY  indicina_schema.fact_table
-        FROM 's3://{bucket}/fact_table'
-        IAM_ROLE '{redshift_iam}';
-
-        COPY  indicina_schema.loan_dim
-        FROM 's3://{bucket}/loan_data'
-        IAM_ROLE '{redshift_iam}';
-
-        COPY  indicina_schema.customer_dim
-        FROM 's3://{bucket}/customer_data'
-        IAM_ROLE '{redshift_iam}';
+        load_from_s3_fact_table = f"""
+            COPY  indicina_schema.fact_table
+            FROM 's3://{bucket}/fact_table'
+            IAM_ROLE '{redshift_iam}';
+        """
+        load_from_s3_loan_dim = f"""
+            COPY  indicina_schema.loan_dim
+            FROM 's3://{bucket}/loan_data'
+            IAM_ROLE '{redshift_iam}';
+        """
+        load_from_s3_customer_dim = f"""
+            COPY  indicina_schema.customer_dim
+            FROM 's3://{bucket}/customer_data'
+            IAM_ROLE '{redshift_iam}';
         """
         try:
             with conn.cursor() as cursor:
@@ -101,8 +103,14 @@ class Loading:
                 self.logger.info("create customer dim table")
                 cursor.execute(create_customer_dim_table)
 
-                self.logger.info("Loading to s3")
-                cursor.execute(load_from_s3)
+                self.logger.info("Loading from s3 to fact table")
+                cursor.execute(load_from_s3_fact_table)
+
+                self.logger.info("Loading from s3 to loan dim")
+                cursor.execute(load_from_s3_loan_dim)
+
+                self.logger.info("Loading from s3 to customer dim table")
+                cursor.execute(load_from_s3_customer_dim)
             conn.close()
 
         except Exception as err:

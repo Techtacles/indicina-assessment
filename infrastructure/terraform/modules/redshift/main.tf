@@ -6,8 +6,5 @@ resource "aws_redshift_cluster" "redshift_cluster" {
   node_type           = "dc2.large"
   cluster_type        = "single-node"
   skip_final_snapshot = true
-  logging {
-    enable      = true
-    bucket_name = var.logging_bucket_name
-  }
+
 }

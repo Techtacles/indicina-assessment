@@ -48,6 +48,7 @@ class Loading:
                       redshift_iam: str, db: str) -> None:
         conn = wr.redshift.connect(connection=connection,
                                    dbname=db, ssl=False)
+        conn.autocommit = True
         create_schema = """CREATE SCHEMA IF NOT EXISTS indicina_schema"""
         create_fact_table = """
         CREATE TABLE IF NOT EXISTS indicina_schema.fact_table(

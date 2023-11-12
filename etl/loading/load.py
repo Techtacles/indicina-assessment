@@ -77,17 +77,20 @@ class Loading:
         load_from_s3_fact_table = f"""
             COPY  indicina_schema.fact_table
             FROM 's3://{bucket}/fact_table'
-            IAM_ROLE '{redshift_iam}';
+            IAM_ROLE '{redshift_iam}'
+            DELIMITER ',' ;
         """
         load_from_s3_loan_dim = f"""
             COPY  indicina_schema.loan_dim
             FROM 's3://{bucket}/loan_data'
-            IAM_ROLE '{redshift_iam}';
+            IAM_ROLE '{redshift_iam}'
+            DELIMITER ',' ;
         """
         load_from_s3_customer_dim = f"""
             COPY  indicina_schema.customer_dim
             FROM 's3://{bucket}/customer_data'
-            IAM_ROLE '{redshift_iam}';
+            IAM_ROLE '{redshift_iam}'
+            DELIMITER ',' ;
         """
         try:
             with conn.cursor() as cursor:

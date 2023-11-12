@@ -22,6 +22,8 @@ resource "null_resource" "zip_file" {
         cd etl
         pip install -r requirements.txt -t .
         zip -r zipped_file.zip .
+        ls
+        pwd
 
     EOF
 

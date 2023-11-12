@@ -65,7 +65,7 @@ class Loading:
             annual_income INTEGER
         );"""
         create_customer_dim_table = """
-        CREATE TABLE IF NOT EXISTS indicina_schema.customer_dim(
+            CREATE TABLE IF NOT EXISTS indicina_schema.customer_dim(
             transaction_id VARCHAR(50),
             customer_id VARCHAR(50),
             transaction_date DATE,

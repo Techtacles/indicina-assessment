@@ -41,7 +41,7 @@ resource "aws_iam_policy" "glue_redshift_pol" {
   policy      = data.aws_iam_policy_document.glue_permission.json
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_logs" {
+resource "aws_iam_role_policy_attachment" "glue_policy_attachment" {
   role       = aws_iam_role.iam_for_lambda.name
   policy_arn = aws_iam_policy.glue_redshift_pol.arn
 }

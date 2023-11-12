@@ -11,7 +11,9 @@ data "aws_iam_policy_document" "lambda_logging" {
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
-      "glue:*"
+      "glue:*",
+      "redshift:*",
+      "s3:*"
     ]
 
     resources = ["arn:aws:logs:*:*:*"]

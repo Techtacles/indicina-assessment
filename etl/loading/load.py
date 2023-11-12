@@ -47,7 +47,7 @@ class Loading:
     def load_redshift(self, connection: str, bucket: str,
                       redshift_iam: str, db: str) -> None:
         conn = wr.redshift.connect(connection=connection,
-                                   dbname=db, ssl=False)
+                                   ssl=False)
         create_schema = """CREATE SCHEMA IF NOT EXISTS indicina_schema"""
         create_table = """
         CREATE TABLE IF NOT EXISTS indicina_schema.fact_table(

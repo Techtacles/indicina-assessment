@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "assume_role" {
 data "aws_iam_policy_document" "policy" {
   statement {
     effect    = "Allow"
-    actions   = ["*"]
+    actions   = ["redshift:*","s3:*"]
     resources = ["*"]
   }
 }

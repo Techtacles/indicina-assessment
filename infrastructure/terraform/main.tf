@@ -26,7 +26,7 @@ resource "null_resource" "zip_file" {
         echo "Successfully uploaded zip file to s3"
 
         echo "Pushing to ecr"
-        cd ../../
+        cd ../
         pwd
         ls
         aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${var.aws_account_number}.dkr.ecr.us-east-1.amazonaws.com

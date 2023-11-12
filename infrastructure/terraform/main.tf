@@ -20,7 +20,6 @@ resource "null_resource" "zip_file" {
         cd ../../
         cp -r data etl
         cd etl
-        pip install -r requirements.txt -t .
         zip -r zipped_file.zip .
         aws s3 cp zipped_file.zip s3://${module.s3_bucket_zipped_lambda.bucket_name}/zipped_lambda/zipped_file.zip
         echo "Successfully uploaded zip file to s3"

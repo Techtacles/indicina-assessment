@@ -2,7 +2,7 @@ from extraction.extract import Extraction
 from transformation.transform import Transformation
 from loading.load import Loading
 import os
-redshift_connection = os.environ["GLUE_CONNECTION"]
+redshift_connection = "test_redshift"
 s3_bucket = os.environ["S3_BUCKET_NAME"]
 redshift_db = os.environ["REDSHIFT_DB_NAME"]
 redshift_iam = os.environ["REDSHIFT_IAM_ROLE"]

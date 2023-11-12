@@ -55,7 +55,7 @@ resource "aws_glue_connection" "redshift_glue_con" {
   depends_on = [module.redshift]
   name       = "redshift-glue-connection"
   connection_properties = {
-    JDBC_CONNECTION_URL = "jdbc:redshift://${module.redshift.endpoint}:${module.redshift.redshift_port}/${module.redshift.db_name}"
+    JDBC_CONNECTION_URL = "jdbc:redshift://${module.redshift.endpoint}/${module.redshift.db_name}"
     PASSWORD            = module.redshift.master_password
     USERNAME            = module.redshift.master_username
     JDBC_ENFORCE_SSL    = false

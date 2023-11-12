@@ -86,14 +86,16 @@ class Loading:
         IAM_ROLE '{redshift_iam}';
         """
         try:
-            self.logger.info("Creating schema")
-            conn.execute(create_schema)
+            with conn.cursor() as cursor:
+                self.logger.info("Creating schema")
+                cursor.execute(create_schema)
 
-            self.logger.info("Creating tables")
-            conn.execute(create_table)
+                self.logger.info("Creating tables")
+                cursor.execute(create_table)
 
-            self.logger.info("Loading to s3")
-            conn.execute(load_from_s3)
+                self.logger.info("Loading to s3")
+                cursor.execute(load_from_s3)
+            conn.close()
 
         except Exception as err:
             self.logger.error(f"Error transforming dataframes. Msg:{err}")

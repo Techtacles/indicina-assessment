@@ -51,17 +51,6 @@ data "aws_ecr_image" "service_image" {
 #   source     = "../../etl/zipped_file.zip"
 # }
 
-resource "aws_glue_connection" "redshift_glue_con" {
-  depends_on = [module.redshift]
-  name       = "redshift-glue-connection"
-  connection_properties = {
-    JDBC_CONNECTION_URL = "jdbc:redshift://${module.redshift.endpoint}/${module.redshift.db_name}"
-    PASSWORD            = module.redshift.master_password
-    USERNAME            = module.redshift.master_username
-    JDBC_ENFORCE_SSL    = false
-  }
-
-}
 
 module "lambda" {
   depends_on            = [null_resource.zip_file, module.redshift, module.ecr]
@@ -71,7 +60,7 @@ module "lambda" {
   lambda_fn_name        = var.lambda_fn_name
   lambda_handler        = var.lambda_handler
   lambda_iam_role       = var.lambda_iam_role
-  glue_conn_name        = aws_glue_connection.redshift_glue_con.name
+  glue_conn_name        = "test_redshift"
   redshift_db_name      = module.redshift.db_name
   redshift_iam_role_arn = module.redshift.redshift_iam_arn
   ecr_image_uri         = module.ecr.ecr_repo_url

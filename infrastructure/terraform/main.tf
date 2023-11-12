@@ -22,20 +22,20 @@ resource "null_resource" "zip_file" {
         cd etl
         pip install -r requirements.txt -t .
         zip -r zipped_file.zip .
-        ls
-        pwd
+        aws s3 cp zipped_file.zip s3://${module.s3_bucket_zipped_lambda.bucket_name}/zipped_lambda/zipped_file.zip
+        echo "Successfully uploaded zip file to s3"
 
     EOF
 
   }
 }
 
-resource "aws_s3_object" "zip_upload" {
-  depends_on = [module.s3_bucket_zipped_lambda, null_resource.zip_file]
-  bucket     = module.s3_bucket_zipped_lambda.bucket_name
-  key        = "zipped_lambda/zipped_file.zip"
-  source     = "../../etl/zipped_file.zip"
-}
+# resource "aws_s3_object" "zip_upload" {
+#   depends_on = [module.s3_bucket_zipped_lambda, null_resource.zip_file]
+#   bucket     = module.s3_bucket_zipped_lambda.bucket_name
+#   key        = "zipped_lambda/zipped_file.zip"
+#   source     = "../../etl/zipped_file.zip"
+# }
 
 resource "aws_glue_connection" "redshift_glue_con" {
   depends_on = [module.redshift]
@@ -50,10 +50,10 @@ resource "aws_glue_connection" "redshift_glue_con" {
 }
 
 module "lambda" {
-  depends_on            = [aws_s3_object.zip_upload, module.redshift]
+  depends_on            = [null_resource.zip_file, module.redshift]
   source                = "./modules/lambda"
-  s3_bucket             = aws_s3_object.zip_upload.bucket
-  s3_key                = aws_s3_object.zip_upload.key
+  s3_bucket             = module.s3_bucket_zipped_lambda.bucket_name
+  s3_key                = "zipped_lambda/zipped_file.zip"
   lambda_fn_name        = var.lambda_fn_name
   lambda_handler        = var.lambda_handler
   lambda_iam_role       = var.lambda_iam_role

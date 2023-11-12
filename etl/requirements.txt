@@ -1,2 +1,2 @@
 awswrangler
-boto3
+

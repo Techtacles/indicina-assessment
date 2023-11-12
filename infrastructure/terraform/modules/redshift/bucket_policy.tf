@@ -14,7 +14,7 @@ data "aws_iam_policy_document" "allow_access_from_another_account" {
       "s3:GetObject",
       "s3:ListBucket",
       "s3:GetBucketAcl",
-      "PutBucketPolicy"
+      "s3:PutBucketPolicy"
     ]
 
     resources = [

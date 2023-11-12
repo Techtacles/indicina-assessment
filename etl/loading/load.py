@@ -75,15 +75,15 @@ class Loading:
         );
         """
         load_from_s3 = f"""
-        COPY INTO indicina_schema.fact_table
+        COPY  indicina_schema.fact_table
         FROM 's3://{bucket}/fact_table'
         IAM_ROLE '{redshift_iam}';
 
-        COPY INTO indicina_schema.loan_dim
+        COPY  indicina_schema.loan_dim
         FROM 's3://{bucket}/loan_data'
         IAM_ROLE '{redshift_iam}';
 
-        COPY INTO indicina_schema.customer_dim
+        COPY  indicina_schema.customer_dim
         FROM 's3://{bucket}/customer_data'
         IAM_ROLE '{redshift_iam}';
         """

@@ -93,6 +93,24 @@ class Loading:
             IAM_ROLE '{redshift_iam}'
             DELIMITER ',' ;
         """
+        join_tables = """
+            SELECT c.customer_id,
+            c.transaction_date,
+            c.transaction_amount,
+            c.narration,
+            c.balance,
+            l.loan_amount,
+            l.loan_application_date,
+            l.credit_score,
+            l.employment_status,
+            l.annual_income
+            FROM indicina_schema.customer_dim c
+            JOIN
+            indicina_schema.loan_dim l
+            ON
+            c.customer_id=l.customer_id;
+
+        """
         try:
             with conn.cursor() as cursor:
                 self.logger.info("Creating schema")
@@ -115,6 +133,9 @@ class Loading:
 
                 self.logger.info("Loading from s3 to customer dim table")
                 cursor.execute(load_from_s3_customer_dim)
+
+                self.logger.info("Merging customer and loan tables")
+                cursor.execute(join_tables)
             conn.close()
 
         except Exception as err:

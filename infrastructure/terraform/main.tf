@@ -38,6 +38,11 @@ resource "null_resource" "zip_file" {
   }
 }
 
+data "aws_ecr_image" "service_image" {
+  depends_on      = [null_resource.zip_file]
+  repository_name = var.ecr_repo
+  image_tag       = "latest"
+}
 # resource "aws_s3_object" "zip_upload" {
 #   depends_on = [module.s3_bucket_zipped_lambda, null_resource.zip_file]
 #   bucket     = module.s3_bucket_zipped_lambda.bucket_name
@@ -69,7 +74,7 @@ module "lambda" {
   redshift_db_name      = module.redshift.db_name
   redshift_iam_role_arn = module.redshift.redshift_iam_arn
   ecr_image_uri         = module.ecr.ecr_repo_url
-  ecr_sha               = module.ecr.ecr_sha
+  ecr_sha               = data.aws_ecr_image.service_image.id
 
 }
 

@@ -7,8 +7,4 @@ resource "aws_ecr_repository" "ecr" {
   }
 }
 
-data "aws_ecr_image" "service_image" {
-  depends_on      = [aws_ecr_repository.ecr]
-  repository_name = var.ecr_name
-  image_tag       = "latest"
-}
+

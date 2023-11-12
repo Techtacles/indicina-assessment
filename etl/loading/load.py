@@ -49,12 +49,13 @@ class Loading:
         conn = wr.redshift.connect(connection=connection,
                                    ssl=False)
         create_schema = """CREATE SCHEMA IF NOT EXISTS indicina_schema"""
-        create_table = """
+        create_fact_table = """
         CREATE TABLE IF NOT EXISTS indicina_schema.fact_table(
             application_id VARCHAR(50),
             customer_id VARCHAR(50)
-        );
-        CREATE TABLE IF NOT EXISTS indicina_schema.loan_dim(
+        );"""
+        create_loan_dim_table = """
+            CREATE TABLE IF NOT EXISTS indicina_schema.loan_dim(
             application_id VARCHAR(50),
             customer_id VARCHAR(50),
             loan_amount INTEGER,
@@ -62,7 +63,8 @@ class Loading:
             credit_score INTEGER,
             employment_status VARCHAR(50),
             annual_income INTEGER
-        );
+        );"""
+        create_customer_dim_table = """
         CREATE TABLE IF NOT EXISTS indicina_schema.customer_dim(
             transaction_id VARCHAR(50),
             customer_id VARCHAR(50),
@@ -70,7 +72,7 @@ class Loading:
             transaction_amount DECIMAL,
             narration VARCHAR(70),
             balance DECIMAL
-        )
+        );
         """
         load_from_s3 = f"""
         COPY INTO indicina_schema.fact_table
@@ -90,8 +92,14 @@ class Loading:
                 self.logger.info("Creating schema")
                 cursor.execute(create_schema)
 
-                self.logger.info("Creating tables")
-                cursor.execute(create_table)
+                self.logger.info("Creating fact tables")
+                cursor.execute(create_fact_table)
+
+                self.logger.info("Create loan dim table")
+                cursor.execute(create_loan_dim_table)
+
+                self.logger.info("create customer dim table")
+                cursor.execute(create_customer_dim_table)
 
                 self.logger.info("Loading to s3")
                 cursor.execute(load_from_s3)

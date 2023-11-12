@@ -34,7 +34,7 @@ resource "aws_s3_object" "zip_upload" {
   depends_on = [module.s3_bucket_zipped_lambda, null_resource.zip_file]
   bucket     = module.s3_bucket_zipped_lambda.bucket_name
   key        = "zipped_lambda/zipped_file.zip"
-  source     = "zipped_file.zip"
+  source     = "../../etl/zipped_file.zip"
 }
 
 resource "aws_glue_connection" "redshift_glue_con" {

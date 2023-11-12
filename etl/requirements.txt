@@ -1,5 +1,2 @@
-pandas
 awswrangler
-s3fs
-fsspec
 boto3
